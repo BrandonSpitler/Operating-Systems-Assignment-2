@@ -1,0 +1,51 @@
+Jacob Haynes
+
+CS3753 (Operating Systems)
+Spring 2013
+University of Colorado Boulder
+Programming Assignment 2: Pthreads
+
+This program looks up the ip address of websites in parrellel using multiple requester and resolver threads. 
+
+------------- Running and Building --------------------
+
+Build:
+ make
+
+Clean:
+ make clean
+
+ Run:
+  ./multi-lookup input/names1.txt input/names2.txt input/names3.txt input/names4.txt input/names5.txt output.txt
+
+Check queue for memory leaks:
+ valgrind ./multi-lookup input/names1.txt input/names2.txt input/names3.txt input/names4.txt input/names5.txt output.txt
+
+------------- Features (Extra Credit) ------------------
+
+Multiple IP addresses:
+ Prints all available ip addresses instead of just 1. Backwards compatibility maintained with util.h by creating wrapper function that only returns one address and has the same name/interface of the old function. 
+  Disabled by setting MAX_IP_ADDRESSES to 1
+
+Core-Thread Matching:
+ This program determines the number of cores and creates twice as many resolver threads (based on benchmarking), but stays within Min and Max Thread constraints. 
+
+Full Loop Lookup: 
+ The requester threads monitor the output file (every 250ms) to see which of its requests were filled and informs the user when the request is finished. Once all are finished, the thread exits. 
+  Disabled by setting REQUESTER_CHECK_RESULTS to 0
+ 
+Benchmarking: 
+ I created a simple benchmakr using perl that runs the program 10 times and times it to determine the optimal thread number using the VM with 4 cores. The optimal appears to be 7, but the tests were not perfect because it does not seperate the DNS request time (which can take longer or shorter depending on internet speed and server load) from the rest of the code. 
+
+1 -- 85.33463
+2 -- 45.35544
+3 -- 20.42549
+4 -- 17.59958
+5 -- 14.39030
+6 -- 11.05774
+7 -- 10.49208
+8 -- 12.91645
+9 -- 13.40506
+10 -- 22.43012
+
+
